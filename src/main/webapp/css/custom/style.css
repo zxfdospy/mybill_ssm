@@ -1,0 +1,196 @@
+.show{
+    border: 1px red solid;
+}
+
+
+div.navitagorDiv{
+    margin-bottom: 20px;
+}
+
+div.loginDivInProductPageModalDiv {
+    width: 350px;
+}
+
+div.loginDivInProductPage {
+    background-color: white;
+    width: 350px;
+    height: 360px;
+    padding: 60px 25px 80px 25px;
+}
+
+div.loginErrorMessageDiv {
+    width: 300px;
+    position: absolute;
+    top: 20px;
+    display: none;
+}
+
+div.loginErrorMessageDiv div.alert {
+    padding: 5px !important;
+}
+div.login_acount_text {
+    color: #3C3C3C;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+div.loginInput {
+    border: 1px solid #CBCBCB;
+    margin: 20px 0px;
+}
+
+div.loginInput input {
+    display: inline-block;
+    border: 0px solid transparent;
+    width: 244px;
+    height: 30px;
+    position: relative;
+    left: 6px;
+    top: 6px;
+}
+
+div.loginInput span, div.loginInput input {
+    display: inline-block;
+}
+
+div.loginInput span.loginInputIcon {
+    margin: 0px;
+    background-color: #CBCBCB;
+    width: 40px;
+    height: 40px;
+}
+
+span.loginInputIcon span.glyphicon {
+    font-size: 22px;
+    position: relative;
+    left: 9px;
+    top: 9px;
+    color: #606060;
+}
+
+div.registerDiv {
+    margin: 10px auto;
+    text-align: center;
+    max-width: 500px;
+}
+
+div.registerErrorMessageDiv {
+    width: 400px;
+    margin: 0px auto;
+    height: 50px;
+    visibility: hidden;
+}
+
+table.registerTable {
+    color: #3C3C3C;
+    font-size: 16px;
+    table-layout: fixed;
+    margin-top: 50px;
+    /*border:1px solid red;*/
+}
+
+table.registerTable td {
+    /* 	border:1px dotted skyblue !important; */
+    padding: 10px 30px;
+}
+
+td.registerTableLeftTD {
+    width: 200px;
+    text-align: right;
+}
+
+td.registerTableRightTD {
+    width: 300px;
+    text-align: left;
+}
+
+td.registerTip {
+    font-weight: bold;
+}
+
+table.registerTable input {
+    border: 1px solid #DEDEDE;
+    width: 213px;
+    height: 36px;
+    font-size: 14px;
+}
+
+td.registerButtonTD {
+    text-align: center;
+}
+
+table.registerTable button {
+    width: 170px;
+    height: 36px;
+    border-radius: 2px;
+    color: white;
+    background-color: #C40000;
+    border-width: 0px;
+}
+
+div.registerSuccessDiv {
+    margin: 10px auto;
+    background-color: #F3FDF6;
+    border: 1px solid #DEF3E6;
+    font-size: 16px;
+    color: #3C3C3C;
+    padding: 20px 130px;
+    max-width: 1024px;
+}
+
+div.workingArea{
+    margin:0px 40px;
+}
+
+table.categoryAddTable td {
+    padding-bottom:5px;
+    text-align: center;
+}
+
+td.categoryAddTableLeftTd{
+    width: 80px;
+}
+
+table.categoryEditTable td {
+    padding-bottom:5px;
+    text-align: center;
+}
+
+td.categoryEditTableLeftTd{
+    width: 80px;
+}
+
+
+table.recordAddTable td {
+    padding: 5px;
+    text-align: center;
+}
+
+td.recordAddTableLeftTd{
+    width: 60px;
+}
+
+div.searchDiv {
+    margin: 0 auto;
+    width: 300px;
+    display: inline-block;
+}
+
+div.listDataTableDiv{
+    margin: 0px auto;
+    min-height:220px;
+}
+
+div.listCategory{
+    max-width: 600px;
+}
+
+table.recordEditTable td {
+    padding: 5px;
+    text-align: center;
+}
+
+td.recordEditTableLeftTd{
+    width: 60px;
+}
+
