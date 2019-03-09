@@ -32,7 +32,7 @@
         $.post(
             page,
             function (data) {
-                console.log(data);
+                // console.log(data);
                 var categories = $.parseJSON(data);
                 $("select#recordEditCategory").empty();
                 for (i in categories) {
@@ -48,14 +48,96 @@
         $("#recordEditModal").modal('show');
     }
 
+    function recordSearch(){
+        var all = $("#listAllCategoryRecord").is(":checked");
+        var cs = null;
+        if (all == false)
+            cs = $("#selectCategoryRecord").val();
+        if(cs==null) {
+            $("#listAllCategoryRecord").prop("checked", true);
+            $("#selectCategoryRecord").attr('disabled', true);
+            $("#selectCategoryRecord").selectpicker('refresh');
+            all=true;
+        }
+        else
+            cs=cs.toString();
+        var start = $("#recordDateStart").val();
+        var end = $("#recordDateEnd").val();
+        var page = "billRecordSearchList";
+        $.post(
+            page,
+            {"all": all, "cs": cs, "start": start, "end": end},
+            function (data) {
+                // console.log(data);
+                var rs=$.parseJSON(data);
+                // console.log(rs);
+                var html = '';
+                for ( var i = 0; i < rs.length; i++) {//循环json对象，拼接tr,td的html
+                    html = html + '<tr>';
+                    html = html + '<td>' + (i+1) + '</td>';
+                    html = html + '<td>' + rs[i].category.name + '</td>';
+                    html = html + '<td>' + rs[i].comment + '</td>';
+                    var newDate=new Date(parseInt(rs[i].date));
+                    date=newDate.format("yyyy-MM-dd HH:mm");
+                    html = html + '<td>' + date+ '</td>';
+                    html = html + '<td>' + rs[i].spend/100 + '</td>';
+                    html = html + '<td>' +'<a '+'id='+(i+1)+' recordid='+rs[i].id+' recordcid='+rs[i].cid+" onclick='showRecordEditModal(this)'"
+                        +" href='javascript:void(0)'"+'>'+'<span'+" class='glyphicon glyphicon-edit'"+'>'+'</span>'+'</a>'+ '</td>';
+                    html = html + '<td>' +'<a '+" href='javascript:void(0)'"+" onclick='deleteRecord("+rs[i].id+")'"+'>'+'<span'+" class='glyphicon glyphicon-trash'"+'>'+'</span>'+'</a>'+ '</td>';
+                    html = html + '</tr>';
+                }
+                $("#recordDetailTbody").empty();
+                $("#recordDetailTbody").html(html);
+            }
+        )
+    }
+
+    function deleteRecord(id){
+        if(confirm("确认删除？")) {
+            var page = "billRecordDelete";
+            $.post(
+                page,
+                {"id": id},
+                function (result) {
+                    if (result == "success") {
+                        // alert("删除成功");
+                        recordSearch();
+                    }else {
+                        alert("删除失败");
+                    }
+                }
+            )
+        }else {
+            return false;
+        }
+    }
+
 
     $(function () {
+
+        // 设置默认起止时间
+        var date = new Date()
+        var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+        var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+        var DateStart = firstDay.format("yyyy-MM-dd");
+        var DateEnd = lastDay.format("yyyy-MM-dd");
+        $("#recordDateStart").val(DateStart);
+        $("#recordDateEnd").val(DateEnd);
+        $("#recordDateStart").attr("readonly", "readonly");
+        $("#recordDateEnd").attr("readonly", "readonly");
+
+        // 给分类选项框加载分类
+        refreshSelectCategory();
+        //刷新表格
+        recordSearch();
+
+
         $('#recordEditDate').datetimepicker({
             // container:"#addRule .modal-content",
             format: 'yyyy-mm-dd hh:ii',
             autoclose: true,
             todayBtn: true,
-            initialDate: new Date(),
+            // initialDate: new Date(),
             language: 'zh-CN',
         });
 
@@ -68,25 +150,87 @@
             var cid = $("#recordEditCategory").val();
             var comment = $("#recordEditComment").val();
             var date = $("#recordEditDate").val();
-            var id=$("#recordEditID").val();
+            var id = $("#recordEditID").val();
             var page = "billRecordEditAjax";
             $.post(
                 page,
-                {"id":id,"spend": spend, "cid": cid, "comment": comment, "sdate": date},
+                {"id": id, "spend": spend, "cid": cid, "comment": comment, "sdate": date},
                 function (result) {
                     if (result == "success") {
-                        location.reload();
+                        // location.reload();
                         alert("编辑成功");
+                        $("#recordEditModal").modal('hide');
+                        recordSearch();
                     } else {
                         alert("编辑失败");
+                        $("#recordEditModal").modal('hide');
                     }
                 }
             )
+        });
+
+        $('#recordDateStart,#recordDateEnd').datetimepicker({
+            // container:"#addRule .modal-content",
+            format: 'yyyy-mm-dd',
+            autoclose: true,
+            todayBtn: true,
+            minView:2,
+            // initialDate: new Date(),
+            language: 'zh-CN',
+        });
+
+        // radio正选反选
+        $("#listAllCategoryRecord").click(function (event) {
+            // 禁用事件的默认动作
+            event.preventDefault();
+        });
+        $("#listAllCategoryRecord").mouseup(function () {
+            $(this).prop("checked", !$(this).is(":checked"));
+            if ($(this).is(":checked"))
+                $("#selectCategoryRecord").attr('disabled', true);
+            else
+                $("#selectCategoryRecord").attr('disabled', false);
+            $("#selectCategoryRecord").selectpicker('refresh');
+        });
+
+
+        $("#recordSearchButton").click(function () {
+            recordSearch();
         })
+
     })
 </script>
 
 <div class="workingArea">
+
+    <div class="recordSearchDiv">
+        <table class="recordSearchTable">
+            <td class="form-control">
+                <span>全部分类</span><input id="listAllCategoryRecord" name="listAllCategoryRecord" type="radio" checked="checked">
+            </td>
+            <td>
+                <select id="selectCategoryRecord" name="selectCategoryRecord" class="selectpicker" title="请选择分类" disabled="disabled"
+                        multiple data-live-search="true"
+                        data-selected-text-format="count > 3">
+                </select>
+            </td>
+            <td>
+                起日期
+            </td>
+            <td style="padding-left: 5px">
+                <input class="form-control" size="16" type="text" value="" name="recordDateStart" id="recordDateStart">
+            </td>
+            <td>
+                止日期
+            </td>
+            <td style="padding-left: 5px">
+                <input class="form-control" size="16" type="text" value="" name="recordDateEnd" id="recordDateEnd">
+            </td>
+            <td>
+                <button id="recordSearchButton" class="btn btn-success" type="button">搜索</button>
+            </td>
+        </table>
+    </div>
 
     <div class="listDataTableDiv">
         <table id="recordDetail" class="table table-striped table-bordered table-hover table-condensed text-center ">
@@ -101,18 +245,21 @@
                 <td>删除</td>
             </tr>
             </thead>
-            <tbody>
-            <c:forEach items="${rs}" var="r" varStatus="status">
-                <tr>
-                    <td>${status.count}</td>
-                    <td>${r.category.name}</td>
-                    <td>${r.comment}</td>
-                    <td><fmt:formatDate value="${r.date}" pattern="yyyy-MM-dd HH:mm"/></td>
-                    <td>${r.spend/100}</td>
-                    <td><a id="${status.count}" recordid="${r.id}" recordcid="${r.cid}" onclick="showRecordEditModal(this)" href="javascript:void(0)"><span class="glyphicon glyphicon-edit"></span></a></td>
-                    <td><a deleteLink="true"  href="billRecordDelete?id=${r.id}"><span class="glyphicon glyphicon-trash"></span></a></td>
-                </tr>
-            </c:forEach>
+            <tbody id="recordDetailTbody">
+            <%--<c:forEach items="${rs}" var="r" varStatus="status">--%>
+                <%--<tr>--%>
+                    <%--<td>${status.count}</td>--%>
+                    <%--<td>${r.category.name}</td>--%>
+                    <%--<td>${r.comment}</td>--%>
+                    <%--<td><fmt:formatDate value="${r.date}" pattern="yyyy-MM-dd HH:mm"/></td>--%>
+                    <%--<td>${r.spend/100}</td>--%>
+                    <%--<td><a id="${status.count}" recordid="${r.id}" recordcid="${r.cid}"--%>
+                           <%--onclick="showRecordEditModal(this)" href="javascript:void(0)"><span--%>
+                            <%--class="glyphicon glyphicon-edit"></span></a></td>--%>
+                    <%--<td><a href="javascript:void(0)" onclick="deleteRecord(${r.id})"><span--%>
+                            <%--class="glyphicon glyphicon-trash"></span></a></td>--%>
+                <%--</tr>--%>
+            <%--</c:forEach>--%>
             </tbody>
 
         </table>
@@ -158,7 +305,7 @@
                         <tr class="submitTR">
                             <td colspan="2" align="center">
                                 <input type="hidden" id="recordEditID" value="">
-                                <button type="submit" class="btn btn-success" id="recordEditSubmitButton">提 交
+                                <button type="button" class="btn btn-success" id="recordEditSubmitButton">提 交
                                 </button>
                             </td>
                         </tr>
@@ -168,3 +315,5 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div>
+
+

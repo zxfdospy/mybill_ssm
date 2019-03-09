@@ -9,6 +9,10 @@ import com.zxfdospy.mybill.service.RecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -58,5 +62,31 @@ public class RecordServiceImpl implements RecordService {
         for(Record r:rs){
             setCategory(r);
         }
+    }
+
+    @Override
+    public List<Record> listSearch(int uid,boolean all, String start, String end, List<Integer> cs) {
+        RecordExample example=new RecordExample();
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+        Date datestart=new Date();
+        Date dateend=new Date();
+        try {
+            datestart=sdf.parse(start);
+            dateend=sdf.parse(end);
+            Calendar c=Calendar.getInstance();
+            c.setTime(dateend);
+            c.add(Calendar.DATE,1);
+            dateend=c.getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if(all)
+            example.createCriteria().andUidEqualTo(uid).andDateBetween(datestart,dateend);
+        else
+            example.createCriteria().andUidEqualTo(uid).andDateBetween(datestart,dateend).andCidIn(cs);
+        example.setOrderByClause("date desc");
+        List<Record> rs=recordMapper.selectByExample(example);
+        setCategories(rs);
+        return rs;
     }
 }

@@ -7,6 +7,10 @@ import com.zxfdospy.mybill.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -44,4 +48,32 @@ public class CategoryServiceImpl implements CategoryService {
         return result;
     }
 
+    @Override
+    public boolean isExist(int uid,String name) {
+        CategoryExample example=new CategoryExample();
+        example.createCriteria().andUidEqualTo(uid).andNameEqualTo(name);
+        List<Category> result=categoryMapper.selectByExample(example);
+        if(result.isEmpty())
+            return false;
+        return true;
+    }
+
+    @Override
+    public List<Category> listSearch(int uid,boolean all,List<Integer> cs) {
+        CategoryExample example=new CategoryExample();
+        if(all)
+            example.createCriteria().andUidEqualTo(uid);
+        else
+            example.createCriteria().andUidEqualTo(uid).andIdIn(cs);
+        List<Category> categories=categoryMapper.selectByExample(example);
+        return categories;
+    }
+
+    @Override
+    public int getTotal(int uid) {
+        CategoryExample example=new CategoryExample();
+        example.createCriteria().andUidEqualTo(uid);
+        List<Category> cs=categoryMapper.selectByExample(example);
+        return cs.size();
+    }
 }

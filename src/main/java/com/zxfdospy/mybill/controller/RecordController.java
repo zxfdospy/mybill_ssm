@@ -1,8 +1,10 @@
 package com.zxfdospy.mybill.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.zxfdospy.mybill.pojo.Record;
 import com.zxfdospy.mybill.pojo.User;
 import com.zxfdospy.mybill.service.RecordService;
+import com.zxfdospy.mybill.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,9 +14,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.util.HtmlUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -52,17 +56,19 @@ public class RecordController {
         return "success";
     }
 
-    @RequestMapping("billRecordList")
-    String billRecordsList(HttpSession session, Model model){
-        User user=(User)session.getAttribute("user");
+//    @RequestMapping("billRecordList")
+//    String billRecordsList(HttpSession session, Model model){
+//        User user=(User)session.getAttribute("user");
 //        if(user==null){
 //            return "fore/indexNoUser";
 //        }
-        int uid=user.getId();
-        List<Record> rs=recordService.listOrderByDate(uid);
-        model.addAttribute("rs",rs);
-        return "fore/listRecord";
-    }
+//        int uid=user.getId();
+//        List<Record> rs=recordService.listOrderByDate(uid);
+//        List<Record> rs=recordService.listSearch(user.getId(),true, DateUtil.getThisMonthBegin(),DateUtil.getThisMonthEnd(),null);
+//        model.addAttribute("rs",rs);
+//        System.out.println(new Date().toString());
+//        return "fore/listRecord";
+//    }
 
     @RequestMapping("billRecordEditAjax")
     @ResponseBody
@@ -96,9 +102,18 @@ public class RecordController {
     }
 
     @RequestMapping("billRecordDelete")
-    String billRecordDelete(int id){
+    @ResponseBody
+    String billRecordDelete(@RequestParam int id){
         recordService.delete(id);
-        return "redirect:billRecordList";
+        return "success";
     }
 
+
+    @RequestMapping("billRecordSearchList")
+    @ResponseBody
+    String billRecordSearchList(@RequestParam boolean all,@RequestParam String start,@RequestParam String end,@RequestParam List<Integer> cs,HttpSession session){
+        User user=(User)session.getAttribute("user");
+        List<Record> rs=recordService.listSearch(user.getId(),all,start,end,cs);
+        return JSONObject.toJSONString(rs);
+    }
 }

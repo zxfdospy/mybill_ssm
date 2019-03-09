@@ -25,7 +25,7 @@
             time=time-1;
             $("span.timecount").text(time);
             if(time==0){
-                self.location.href="indexPage";
+                self.location.href="billwelcome";
             }
         }
     })
@@ -36,6 +36,9 @@
     <img src="img/site/registerSuccess.png">
     恭喜注册成功
 
-    <div class="backtohome text-center"><span class="timecount" style="color:orange">5</span>秒后跳转首页...
+    <div class="backtohome text-center"><span class="timecount" style="color:orange">3</span>秒后跳转首页...
     </div>
 </div>
+
+
+<%@include file="../include/footer.jsp"%>

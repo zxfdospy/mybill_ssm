@@ -13,5 +13,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <%@include file="../include/heater.jsp"%>
-<%@include file="../include/top.jsp"%>
+<%--<%@include file="../include/top.jsp"%>--%>
+<%@include file="../include/page/indexInformation.jsp"%>
+<%@include file="../include/footer.jsp"%>
 

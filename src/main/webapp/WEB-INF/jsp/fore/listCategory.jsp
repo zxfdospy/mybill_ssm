@@ -15,3 +15,6 @@
 <%@include file="../include/heater.jsp"%>
 <%@include file="../include/top.jsp"%>
 <%@include file="../include/page/categoryDetail.jsp"%>
+
+
+<%@include file="../include/footer.jsp"%>

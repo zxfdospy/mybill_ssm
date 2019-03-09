@@ -41,7 +41,7 @@ public class UserController {
     @RequestMapping("loginout")
     String loginout(HttpSession session){
         session.removeAttribute("user");
-        return "fore/index";
+        return "redirect:billhome";
     }
 
     @RequestMapping("billLoginAjax")

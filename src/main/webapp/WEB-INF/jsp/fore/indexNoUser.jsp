@@ -14,3 +14,6 @@
 
 <%@include file="../include/heater.jsp"%>
 <%@include file="../include/topNoUser.jsp"%>
+
+
+<%@include file="../include/footer.jsp"%>

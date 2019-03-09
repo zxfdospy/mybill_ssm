@@ -11,4 +11,6 @@ public interface RecordService {
     Record get(int id);
 
     List<Record> listOrderByDate(int uid);
+
+    List<Record> listSearch(int uid,boolean all,String start,String end,List<Integer> cs);
 }

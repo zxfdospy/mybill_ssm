@@ -3,8 +3,10 @@
 }
 
 
+
+
 div.navitagorDiv{
-    margin-bottom: 20px;
+    /*margin-bottom: 20px;*/
 }
 
 div.loginDivInProductPageModalDiv {
@@ -124,7 +126,7 @@ table.registerTable button {
     height: 36px;
     border-radius: 2px;
     color: white;
-    background-color: #C40000;
+    background-color: #31b0d5;
     border-width: 0px;
 }
 
@@ -140,7 +142,10 @@ div.registerSuccessDiv {
 
 div.workingArea{
     margin:0px 40px;
+    padding-top:70px;
 }
+
+
 
 table.categoryAddTable td {
     padding-bottom:5px;
@@ -171,7 +176,7 @@ td.recordAddTableLeftTd{
 }
 
 div.searchDiv {
-    margin: 0 auto;
+    /*margin: 0 auto;*/
     width: 300px;
     display: inline-block;
 }
@@ -192,5 +197,25 @@ table.recordEditTable td {
 
 td.recordEditTableLeftTd{
     width: 60px;
+}
+
+table.recordSearchTable td{
+    padding-left: 15px;
+    /*border: 1px red solid;*/
+}
+
+div.recordSearchDiv{
+    max-width: 900px;
+    margin: 10px auto;
+}
+
+table.categorySearchTable td{
+    padding-left: 15px;
+    /*border: 1px red solid;*/
+}
+
+div.categorySearchDiv{
+    max-width: 900px;
+    margin: 10px auto;
 }
 

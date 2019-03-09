@@ -9,6 +9,11 @@ public interface CategoryService {
     void delete(int id);
     void update(Category category);
     Category get(int id);
+    int getTotal(int uid);
 
     List<Category> listByUid(int uid);
+    boolean isExist(int uid,String name);
+    List<Category> listSearch(int uid,boolean all,List<Integer> cs);
+
+
 }
